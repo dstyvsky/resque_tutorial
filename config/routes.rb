@@ -1,3 +1,6 @@
+require 'resque/server'
+
+
 Rails.application.routes.draw do
   resources :articles
   resources :comments
@@ -11,4 +14,5 @@ Rails.application.routes.draw do
   get '/logout' => 'sessions#destroy'
 
   root to: 'dashboard#show'
+  mount Resque::Server.new, at: "/resque"
 end
