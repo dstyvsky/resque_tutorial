@@ -11,7 +11,16 @@ class Comment < ActiveRecord::Base
     body.split.count
   end
 
-  def self.total_word_count
-    all.inject(0) {|total, a| total += a.word_count }
-  end
+	def self.update_statistics
+		calculate_total_word_count
+	end
+
+	def self.calculate_total_word_count
+		total = all.inject(0) {|total, a| total += a.word_count }
+		DataCache.set 'comment/total_word_count', total
+	end
+
+	def self.total_word_count
+		DataCache.get_i('comment/total_word_count')
+	end
 end
